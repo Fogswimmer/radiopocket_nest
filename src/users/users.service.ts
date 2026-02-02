@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import * as fsSync from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -12,17 +15,6 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
-
-  async create(dto: CreateUserDto): Promise<User> {
-    console.log('Received DTO:', dto);
-    const hash = await bcrypt.hash(dto.password, 10);
-    const user = this.usersRepository.create({
-      ...dto,
-      passwordHash: hash,
-    });
-
-    return this.usersRepository.save(user);
-  }
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find();
@@ -50,5 +42,37 @@ export class UsersService {
 
   async remove(id: number): Promise<any> {
     return this.usersRepository.delete(id);
+  }
+
+  async uploadAvatar(id: number, file: Express.Multer.File): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+
+    if (!user) {
+      await fs.unlink(file.path);
+      throw new NotFoundException('User not found');
+    }
+
+    const avatarDir = path.join('./uploads/avatars', user.id.toString());
+
+    if (!fsSync.existsSync(avatarDir)) {
+      await fs.mkdir(avatarDir, { recursive: true });
+    }
+
+    const avatarPath = path.join(avatarDir, file.filename);
+
+    await fs.rename(file.path, avatarPath);
+
+    if (user.avatar) {
+      const oldAvatarPath = path.join('./uploads', user.avatar);
+      try {
+        await fs.unlink(oldAvatarPath);
+      } catch (error) {
+        console.error('Error deleting old avatar:', error);
+      }
+    }
+
+    user.avatar = `/uploads/avatars/${user.id}/${file.filename}`;
+
+    return this.usersRepository.save(user);
   }
 }
