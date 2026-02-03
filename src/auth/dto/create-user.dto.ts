@@ -12,6 +12,7 @@ export class CreateUserDto {
   @ApiProperty({
     minLength: 2,
     maxLength: 50,
+    example: 'John',
   })
   @IsNotEmpty()
   @MinLength(2)
@@ -21,6 +22,7 @@ export class CreateUserDto {
   @ApiProperty({
     minLength: 2,
     maxLength: 50,
+    example: 'Doe',
   })
   @IsNotEmpty()
   @MinLength(2)
@@ -30,6 +32,7 @@ export class CreateUserDto {
   @ApiProperty({
     minLength: 2,
     maxLength: 50,
+    example: 'admin',
   })
   @IsNotEmpty()
   @MinLength(2)
@@ -40,6 +43,7 @@ export class CreateUserDto {
     minLength: 8,
     description:
       'The password must contain at least 8 characters, including at least one letter and one number.',
+    example: 'admin123',
   })
   @IsNotEmpty()
   @MinLength(8)
@@ -52,6 +56,7 @@ export class CreateUserDto {
   @ApiProperty({
     maxLength: 100,
     required: false,
+    example: 'john_doe@example.com',
   })
   @IsOptional()
   @IsEmail()

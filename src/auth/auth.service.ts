@@ -36,7 +36,7 @@ export class AuthService {
       passwordHash: hash,
     });
 
-    this.usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     const payload = { sub: user.id, username: user.username };
 
@@ -64,6 +64,12 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async logOut(): Promise<any> {
+    return {
+      access_token: null,
     };
   }
 }
