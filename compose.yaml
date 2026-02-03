@@ -10,6 +10,17 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+  mail-catcher:
+    image: schickling/mailcatcher
+    container_name: mailer
+    ports:
+      - "1080:1080"
+      - "1025:1025"
 
 volumes:
   postgres-data:

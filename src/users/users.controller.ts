@@ -13,12 +13,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile } from '@nestjs/common';
 import { User } from './entities/user.entity';
-import { multerConfig } from 'src/config/multer.config';
-import { FileValidationPipe } from 'src/common/validators/file-validation.pipe';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from 'src/common/decorators/public.decorator';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { Public } from '@/common/decorators/public.decorator';
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import { multerConfig } from '@/config/multer.config';
+import { FileValidationPipe } from '@/common/validators/file-validation.pipe';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -45,7 +46,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user profile' })
   @ApiResponse({ status: 200, description: 'User profile updated' })
   @ApiBearerAuth()
-  async updateProfile(
+  updateProfile(
     @CurrentUser('id') userId: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {

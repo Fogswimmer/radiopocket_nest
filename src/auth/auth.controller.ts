@@ -7,12 +7,13 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
-import { Public } from 'src/common/decorators/public.decorator';
-import { CreateUserDto } from 'src/auth/dto/create-user.dto';
-import { User } from 'src/users/entities/user.entity';
+
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Public } from '@/common/decorators/public.decorator';
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import { User } from '@/users/entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('auth')
 @UseGuards(JwtAuthGuard)

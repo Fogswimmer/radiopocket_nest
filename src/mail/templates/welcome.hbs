@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #4F46E5;
+      color: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .content {
+      border: 1px solid #e5e7eb;
+      border-top: none;
+      padding: 30px;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #4F46E5;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>RadioPocket</h1>
+    </div>
+    <div class="content">
+      <h2>Привет, {{username}}!</h2>
+      <p>Добро пожаловать в RadioPocket. Ваш аккаунт успешно создан.</p>
+      <p><strong>Ваши данные:</strong></p>
+      <ul>
+        <li>Имя: {{firstName}} {{lastName}}</li>
+        <li>Email: {{email}}</li>
+      </ul>
+      <p>Если вы не создали этот аккаунт, просто проигнорируйте это письмо.</p>
+    </div>
+  </div>
+</body>
+
+</html>
+
