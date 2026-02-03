@@ -60,10 +60,14 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
+    user.lastLogin = new Date();
+    await this.usersRepository.save(user);
+
     const payload = { sub: user.id, username: user.username };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
+      last_login: user.lastLogin,
     };
   }
 
