@@ -50,7 +50,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const avatarDir = path.join('./uploads/avatars', user.id.toString());
+    const avatarDir = path.join('./public/uploads/avatars', user.id.toString());
 
     if (!fsSync.existsSync(avatarDir)) {
       await fs.mkdir(avatarDir, { recursive: true });
@@ -61,7 +61,7 @@ export class UsersService {
     await fs.rename(file.path, avatarPath);
 
     if (user.avatar) {
-      const oldAvatarPath = path.join('./uploads', user.avatar);
+      const oldAvatarPath = path.join('./public/uploads', user.avatar);
       try {
         await fs.unlink(oldAvatarPath);
       } catch (error) {

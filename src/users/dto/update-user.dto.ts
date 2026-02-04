@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from '../../auth/dto/create-user.dto';
+import { CreateUserDto } from './create-user.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsEmail, IsOptional, MaxLength } from 'class-validator';
 

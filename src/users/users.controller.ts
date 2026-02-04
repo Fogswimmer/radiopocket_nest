@@ -30,27 +30,27 @@ export class UsersController {
   @ApiOperation({ summary: 'Find all users' })
   @ApiResponse({ status: 200, description: 'List of users' })
   @Public()
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  async findAll(): Promise<User[]> {
+    return await this.usersService.findAll();
   }
 
   @Get('me')
   @ApiOperation({ summary: 'Get user profile' })
   @ApiResponse({ status: 200, description: 'User profile' })
   @ApiBearerAuth()
-  getProfile(@CurrentUser() user: User) {
-    return this.usersService.findOneById(user.id);
+  async getProfile(@CurrentUser() user: User): Promise<User | null> {
+    return await this.usersService.findOneById(user.id);
   }
 
   @Patch('me')
   @ApiOperation({ summary: 'Update user profile' })
   @ApiResponse({ status: 200, description: 'User profile updated' })
   @ApiBearerAuth()
-  updateProfile(
+  async updateProfile(
     @CurrentUser('id') userId: number,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.update(userId, updateUserDto);
+  ): Promise<User> {
+    return await this.usersService.update(userId, updateUserDto);
   }
 
   @Post('me/avatar')
@@ -58,18 +58,18 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Avatar uploaded' })
   @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('file', multerConfig))
-  uploadAvatar(
+  async uploadAvatar(
     @CurrentUser('id') userId: number,
     @UploadedFile(new FileValidationPipe()) file: Express.Multer.File,
   ) {
-    return this.usersService.uploadAvatar(userId, file);
+    return await this.usersService.uploadAvatar(userId, file);
   }
 
   @Delete('me')
   @ApiOperation({ summary: 'Delete user profile' })
   @ApiResponse({ status: 200, description: 'User profile deleted' })
   @ApiBearerAuth()
-  deleteProfile(@CurrentUser('id') userId: number) {
-    return this.usersService.remove(userId);
+  async deleteProfile(@CurrentUser('id') userId: number) {
+    return await this.usersService.remove(userId);
   }
 }

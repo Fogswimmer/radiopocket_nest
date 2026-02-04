@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 import { User } from '@/users/entities/user.entity';
 
 import { MailService } from '@/mail/mail.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {

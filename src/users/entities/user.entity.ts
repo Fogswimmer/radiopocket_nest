@@ -1,6 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+  CreateDateColumn,
+  BeforeInsert,
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { UserRole } from '../enums/user-role.enum';
-import { UserStatus } from '../enums/user-status.enum';
+import { Station } from '@/stations/entities/station.entity';
 
 @Entity()
 export class User {
@@ -33,12 +42,8 @@ export class User {
   })
   role: UserRole;
 
-  @Column({
-    type: 'enum',
-    enum: UserStatus,
-    default: UserStatus.ACTIVE,
-  })
-  status: UserStatus;
+  @Column({ default: true })
+  isActive: boolean;
 
   @Column({
     type: 'timestamp',
@@ -51,9 +56,18 @@ export class User {
   })
   avatar?: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  @ManyToMany(() => Station, (station) => station.users, {
+    cascade: true,
+  })
+  @JoinTable()
+  favoriteStations: Station[];
+
+  @BeforeInsert()
+  async setPassword(password: string) {
+    const salt = await bcrypt.genSalt();
+    this.passwordHash = await bcrypt.hash(password || this.passwordHash, salt);
+  }
 }
