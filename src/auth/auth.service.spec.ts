@@ -68,8 +68,8 @@ describe('AuthService', () => {
         email: 'john@mail.com',
       };
 
-      repo.findOne.mockResolvedValueOnce(null); // username free
-      repo.findOne.mockResolvedValueOnce(null); // email free
+      repo.findOne.mockResolvedValueOnce(null);
+      repo.findOne.mockResolvedValueOnce(null);
 
       repo.create.mockReturnValue({
         id: 1,
@@ -104,8 +104,8 @@ describe('AuthService', () => {
 
     it('throws if email exists', async () => {
       repo.findOne
-        .mockResolvedValueOnce(null) // username ok
-        .mockResolvedValueOnce({ id: 2 } as User); // email exists
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 2 } as User);
 
       await expect(
         service.register({ username: 'john', email: 'dup@mail.com' } as any),
@@ -157,17 +157,6 @@ describe('AuthService', () => {
       await expect(
         service.signIn({ username: 'john', password: 'bad' } as any),
       ).rejects.toThrow(UnauthorizedException);
-    });
-  });
-
-  // -------------------------------------------------
-  // LOGOUT
-  // -------------------------------------------------
-
-  describe('logOut', () => {
-    it('returns null token', async () => {
-      const result = await service.logOut();
-      expect(result.access_token).toBeNull();
     });
   });
 });

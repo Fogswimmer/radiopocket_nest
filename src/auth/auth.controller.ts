@@ -1,17 +1,10 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from '@/common/decorators/public.decorator';
-import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { User } from '@/users/entities/user.entity';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 
@@ -34,16 +27,5 @@ export class AuthController {
   @Public()
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto);
-  }
-
-  @Post('logout')
-  @ApiOperation({ summary: 'Logout user' })
-  @ApiResponse({ status: 200, description: 'User logged out' })
-  @ApiBearerAuth()
-  logOut(@CurrentUser() user: User) {
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    return this.authService.logOut();
   }
 }

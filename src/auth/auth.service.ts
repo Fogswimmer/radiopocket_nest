@@ -9,7 +9,6 @@ import { SignInDto } from './dto/sign-in.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@/users/entities/user.entity';
-
 import { MailService } from '@/mail/mail.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 
@@ -86,13 +85,8 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
+      exprires_in: 3600,
       last_login: user.lastLogin,
-    };
-  }
-
-  async logOut(): Promise<any> {
-    return {
-      access_token: null,
     };
   }
 }

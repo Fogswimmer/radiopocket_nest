@@ -5,9 +5,7 @@ import {
   ManyToMany,
   JoinTable,
   CreateDateColumn,
-  BeforeInsert,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { UserRole } from '../enums/user-role.enum';
 import { Station } from '@/stations/entities/station.entity';
 
@@ -64,10 +62,4 @@ export class User {
   })
   @JoinTable()
   favoriteStations: Station[];
-
-  @BeforeInsert()
-  async setPassword(password: string) {
-    const salt = await bcrypt.genSalt();
-    this.passwordHash = await bcrypt.hash(password || this.passwordHash, salt);
-  }
 }
